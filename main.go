@@ -5,29 +5,25 @@ import (
 	"net/http"
 )
 
-func homeHandler(w http.ResponseWriter, r *http.Request) {
-	fmt.Fprintln(w, "Home Handler")
+func noteList(w http.ResponseWriter, r *http.Request) {
+	fmt.Fprintf(w, "Listagem de notas...")
 }
 
-func olaHandler(w http.ResponseWriter, r *http.Request) {
-	fmt.Fprintln(w, "Ola Handler")
+func noteView(w http.ResponseWriter, r *http.Request) {
+	fmt.Fprint(w, "Exibindo uma nota específica...")
+}
+
+func noteCreate(w http.ResponseWriter, r *http.Request) {
+	fmt.Fprint(w, "Criando uma nova nota...")
 }
 
 func main() {
 	fmt.Println("Servidor rodando na porta 5000")
 	mux := http.NewServeMux()
-	mux.HandleFunc("/", homeHandler)
-	mux.HandleFunc("/ola/", olaHandler)
-	mux.HandleFunc("/ola/mundo", func(w http.ResponseWriter, r *http.Request) {
-		fmt.Fprintln(w, "Ola Mundo Handler")
-	})
-	mux.HandleFunc("/hello", func(w http.ResponseWriter, r *http.Request) {
-		fmt.Fprintln(w, "Hello Handler")
-	})
 
-	mux.HandleFunc("ola.pessoas.com/", func(w http.ResponseWriter, r *http.Request) {
-		fmt.Fprintln(w, "Ola Pessoas Handler")
-	})
+	mux.HandleFunc("/", noteList)
+	mux.HandleFunc("/note/view", noteView)
+	mux.HandleFunc("/note/create", noteCreate)
 
 	http.ListenAndServe(":5000", mux)
 }
