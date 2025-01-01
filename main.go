@@ -6,14 +6,29 @@ import (
 )
 
 func noteList(w http.ResponseWriter, r *http.Request) {
+	if r.Method != "GET" {
+		w.WriteHeader(http.StatusMethodNotAllowed)
+		fmt.Fprint(w, "Método não permitido.")
+		return
+	}
 	fmt.Fprintf(w, "Listagem de notas...")
 }
 
 func noteView(w http.ResponseWriter, r *http.Request) {
+	if r.Method != "GET" {
+		w.WriteHeader(http.StatusMethodNotAllowed)
+		fmt.Fprint(w, "Método não permitido.")
+		return
+	}
 	fmt.Fprint(w, "Exibindo uma nota específica...")
 }
 
 func noteCreate(w http.ResponseWriter, r *http.Request) {
+	if r.Method != "POST" {
+		w.WriteHeader(http.StatusMethodNotAllowed)
+		fmt.Fprint(w, "Método não permitido.")
+		return
+	}
 	fmt.Fprint(w, "Criando uma nova nota...")
 }
 
