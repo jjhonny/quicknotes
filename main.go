@@ -10,11 +10,8 @@ func noteList(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, "Método não permitido.", http.StatusMethodNotAllowed)
 		return
 	}
-	w.Header().Set("Content-Type", "application/json")
-	w.Header().Add("Teste", "123")
-	w.Header()["Date"] = nil // Exclui o cabeçalho Date
-	w.Header().Del("Teste")
-	fmt.Fprintf(w, `{'id': 1, 'title': 'Minha primeira nota'}`)
+	w.Header().Set("Content-Type", "text/html; charset=utf-8")
+	fmt.Fprintf(w, "<h1>Lista de anotações e lembretes</h1>")
 }
 
 func noteView(w http.ResponseWriter, r *http.Request) {
@@ -28,7 +25,15 @@ func noteView(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, "Nota não encontrada.", http.StatusNotFound)
 		return
 	}
-	fmt.Fprint(w, "Exibindo a nota "+id)
+
+	note := `
+        <div>
+            <h3>Está é a nota %s</h3>
+            <p>Conteudo da nota</p>
+        </div>
+    `
+
+	fmt.Fprintf(w, note, id)
 }
 
 func noteCreate(w http.ResponseWriter, r *http.Request) {
