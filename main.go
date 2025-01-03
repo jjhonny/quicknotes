@@ -10,7 +10,11 @@ func noteList(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, "Método não permitido.", http.StatusMethodNotAllowed)
 		return
 	}
-	fmt.Fprintf(w, "Listagem de notas...")
+	w.Header().Set("Content-Type", "application/json")
+	w.Header().Add("Teste", "123")
+	w.Header()["Date"] = nil // Exclui o cabeçalho Date
+	w.Header().Del("Teste")
+	fmt.Fprintf(w, `{'id': 1, 'title': 'Minha primeira nota'}`)
 }
 
 func noteView(w http.ResponseWriter, r *http.Request) {
