@@ -22,7 +22,13 @@ func noteView(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, "Método não permitido.", http.StatusMethodNotAllowed)
 		return
 	}
-	fmt.Fprint(w, "Exibindo uma nota específica...")
+
+	id := r.URL.Query().Get("id")
+	if id == "" {
+		http.Error(w, "Nota não encontrada.", http.StatusNotFound)
+		return
+	}
+	fmt.Fprint(w, "Exibindo a nota "+id)
 }
 
 func noteCreate(w http.ResponseWriter, r *http.Request) {
