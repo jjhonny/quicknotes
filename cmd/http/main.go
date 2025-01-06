@@ -17,25 +17,19 @@ func noteList(w http.ResponseWriter, r *http.Request) {
 }
 
 func noteView(w http.ResponseWriter, r *http.Request) {
-	if r.Method != http.MethodGet {
-		http.Error(w, "Método não permitido.", http.StatusMethodNotAllowed)
-		return
-	}
-
 	id := r.URL.Query().Get("id")
 	if id == "" {
 		http.Error(w, "Nota não encontrada.", http.StatusNotFound)
 		return
 	}
 
-	note := `
-        <div>
-            <h3>Está é a nota %s</h3>
-            <p>Conteudo da nota</p>
-        </div>
-    `
+	t, err := template.ParseFiles("views/templates/noteView.html")
+	if err != nil {
+		http.Error(w, "Aconteceu um erro ao executar essa página", http.StatusInternalServerError)
+		return
+	}
 
-	fmt.Fprintf(w, note, id)
+	t.Execute(w, id)
 }
 
 func noteCreate(w http.ResponseWriter, r *http.Request) {
