@@ -2,16 +2,18 @@ package main
 
 import (
 	"fmt"
+	"html/template"
 	"net/http"
 )
 
 func noteList(w http.ResponseWriter, r *http.Request) {
-	if r.Method != http.MethodGet {
-		http.Error(w, "Método não permitido.", http.StatusMethodNotAllowed)
+	t, err := template.ParseFiles("views/templates/home.html")
+	if err != nil {
+		http.Error(w, "Aconteceu um erro ao executar essa página", http.StatusInternalServerError)
 		return
 	}
-	w.Header().Set("Content-Type", "text/html; charset=utf-8")
-	fmt.Fprintf(w, "<h1>Lista de anotações e lembretes</h1>")
+
+	t.Execute(w, nil)
 }
 
 func noteView(w http.ResponseWriter, r *http.Request) {
