@@ -6,16 +6,17 @@ import (
 )
 
 type TemplateData struct {
-	Nome string
+	Nome  string
+	Idade int
 }
 
 func main() {
-	t, err := template.New("teste").Parse("<h1>Hello {{ .Nome }}</h1>")
+	t, err := template.ParseFiles("./cmd/hello.html")
 	if err != nil {
 		panic(err)
 	}
 
-	data := TemplateData{Nome: "Jhonny"}
+	data := TemplateData{Nome: "Jhonny", Idade: 22}
 
 	err = t.Execute(os.Stdout, data)
 	if err != nil {
