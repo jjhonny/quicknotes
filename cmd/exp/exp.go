@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"html/template"
 	"os"
 )
@@ -11,14 +12,17 @@ type TemplateData struct {
 }
 
 func main() {
-	t, err := template.ParseFiles("./cmd/hello.html")
+	t, err := template.ParseFiles("b.html", "a.html")
+
+	fmt.Println(t.Name())
+
+	fmt.Println(t.DefinedTemplates())
+
 	if err != nil {
 		panic(err)
 	}
 
-	data := TemplateData{Nome: "Jhonny", Idade: 22}
-
-	err = t.Execute(os.Stdout, data)
+	err = t.ExecuteTemplate(os.Stdout, "a.html", nil)
 	if err != nil {
 		panic(err)
 	}
