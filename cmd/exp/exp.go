@@ -1,24 +1,24 @@
 package main
 
 import (
-	"html/template"
-	"os"
+	"flag"
+	"fmt"
 )
 
-type TemplateData struct {
-	Nome  string
-	Idade int
-}
-
 func main() {
-	t, err := template.ParseFiles("layout1.html", "home.html", "footer.html", "header.html")
+	var port string
+	var verbose bool
+	var valor int
+	flag.StringVar(&port, "port", "7000", "Porta do servidor")
+	flag.BoolVar(&verbose, "v", false, "Modo verboso")
+	flag.IntVar(&valor, "valor", 0, "Valor a ser exibido")
 
-	if err != nil {
-		panic(err)
-	}
+	flag.Parse()
 
-	err = t.ExecuteTemplate(os.Stdout, "layout1.html", nil)
-	if err != nil {
-		panic(err)
+	if verbose {
+		fmt.Println("Server rodando na porta", port)
+		fmt.Println(valor)
+	} else {
+		fmt.Println(port)
 	}
 }
