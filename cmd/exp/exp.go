@@ -1,21 +1,19 @@
 package main
 
 import (
-	"log/slog"
-	"os"
+	"context"
+	"fmt"
+
+	"github.com/jackc/pgx/v5"
 )
 
 // arquive for examples
 func main() {
-	// h := slog.NewTextHandler(os.Stderr, nil)
-	h := slog.NewJSONHandler(os.Stderr, &slog.HandlerOptions{
-		Level: slog.LevelDebug,
-	})
-
-	log := slog.New(h).With("app", "exp")
-
-	log.Debug("Debug message")
-	log.Info("Info message", slog.Group("request_info", "request_id", 123))
-	log.Warn("warn message")
-	log.Error("error message", "request_id", 123)
+	dbURL := "postgres://postgres:secret@localhost:5434/postgres"
+	conn, err := pgx.Connect(context.Background(), dbURL)
+	if err != nil {
+		panic(err)
+	}
+	fmt.Println("Conexão com o banco foi efetuada com sucesso")
+	defer conn.Close(context.Background())
 }
