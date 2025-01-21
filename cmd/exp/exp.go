@@ -21,6 +21,7 @@ func main() {
 	defer conn.Close(context.Background())
 
 	createTable()
+	insertPost()
 }
 
 func createTable() {
@@ -36,5 +37,25 @@ func createTable() {
 	if err != nil {
 		panic(err)
 	}
-	fmt.Println("Table posts created")
+	fmt.Println("Tabela posts criada com sucesso")
+}
+
+// INSERÇÃO CONTRA SQL INJECTION
+func insertPost() {
+	title := "Post 1"
+	content := "Contéudo do post 1"
+	author := "robson"
+	query := `
+		INSERT INTO posts (
+			title,
+			content,
+			author	
+		)
+		values ($1, $2, $3)
+	`
+	_, err := conn.Exec(context.Background(), query, title, content, author)
+	if err != nil {
+		panic(err)
+	}
+	fmt.Println("Post criado com sucesso")
 }
