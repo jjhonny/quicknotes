@@ -20,8 +20,10 @@ func main() {
 	fmt.Println("Conexão com o banco foi efetuada com sucesso")
 	defer conn.Close(context.Background())
 
-	createTable()
-	insertPostWithReturn()
+	// createTable()
+	// insertPost()
+	// insertPostWithReturn()
+	selectById()
 }
 
 func createTable() {
@@ -75,4 +77,21 @@ func insertPostWithReturn() {
 		panic(err)
 	}
 	fmt.Println("Post Criado. id =", id)
+}
+
+func selectById() {
+	id := 3
+	var title, content, author string
+	query := "SELECT title, content, author FROM posts WHERE id = $1"
+	row := conn.QueryRow(context.Background(), query, id)
+	err := row.Scan(&title, &content, &author)
+	if err == pgx.ErrNoRows {
+		fmt.Println("No post found for id = ", id)
+		return
+	}
+	if err != nil {
+		panic(err)
+	}
+
+	fmt.Printf("Post: title=%s, content=%s, author=%s \n", title, content, author)
 }
