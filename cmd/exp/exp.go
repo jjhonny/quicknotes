@@ -7,6 +7,13 @@ import (
 	"github.com/jackc/pgx/v5"
 )
 
+type Post struct {
+	id      int
+	title   string
+	content string
+	author  string
+}
+
 var conn *pgx.Conn
 
 // arquive for examples
@@ -23,7 +30,8 @@ func main() {
 	// createTable()
 	// insertPost()
 	// insertPostWithReturn()
-	selectById()
+	// selectById()
+	selectAllPosts()
 }
 
 func createTable() {
@@ -94,4 +102,33 @@ func selectById() {
 	}
 
 	fmt.Printf("Post: title=%s, content=%s, author=%s \n", title, content, author)
+}
+
+func selectAllPosts() {
+	query := `
+        SELECT * FROM posts
+    `
+	rows, err := conn.Query(context.Background(), query)
+	if err != nil {
+		panic(err)
+	}
+	defer rows.Close()
+
+	if rows.Err() != nil {
+		panic(rows.Err())
+	}
+
+	var posts []Post
+	for rows.Next() {
+		var post Post
+		err = rows.Scan(&post.id, &post.title, &post.content, &post.author)
+		if err != nil {
+			panic(err)
+		}
+		posts = append(posts, post)
+	}
+
+	for _, post := range posts {
+		fmt.Println(post)
+	}
 }
